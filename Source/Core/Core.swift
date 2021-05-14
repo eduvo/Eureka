@@ -403,7 +403,7 @@ open class FormViewController: UIViewController, FormViewControllerProtocol, For
         return form
         }()
 
-    public var form: Form {
+    open var form: Form {
         get { return _form }
         set {
             guard form !== newValue else { return }

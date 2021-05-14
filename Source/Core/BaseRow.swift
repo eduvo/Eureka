@@ -73,6 +73,18 @@ open class BaseRow: BaseRowType {
         set {}
         get { return nil }
     }
+    
+    open func wasAddedTo(section: Section) {
+        self.section = section
+        if let t = tag {
+            assert(section.form?.rowsByTag[t] == nil, "Duplicate tag \(t)")
+            self.section?.form?.rowsByTag[t] = self
+            self.section?.form?.tagToValues[t] = baseValue != nil ? baseValue! : NSNull()
+        }
+        addToRowObservers()
+        evaluateHidden()
+        evaluateDisabled()
+    }
 
     open func validate(quietly: Bool = false) -> [ValidationError] {
         return []
@@ -188,18 +200,6 @@ extension BaseRow {
             disabledCache = predicate.evaluate(with: self, substitutionVariables: form.dictionaryValuesToEvaluatePredicate())
         }
         updateCell()
-    }
-
-    final func wasAddedTo(section: Section) {
-        self.section = section
-        if let t = tag {
-            assert(section.form?.rowsByTag[t] == nil, "Duplicate tag \(t)")
-            self.section?.form?.rowsByTag[t] = self
-            self.section?.form?.tagToValues[t] = baseValue != nil ? baseValue! : NSNull()
-        }
-        addToRowObservers()
-        evaluateHidden()
-        evaluateDisabled()
     }
 
     final func addToHiddenRowObservers() {

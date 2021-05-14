@@ -38,7 +38,7 @@ public protocol FormDelegate : AnyObject {
 // MARK: Form
 
 /// The class representing the Eureka form.
-public final class Form {
+open class Form {
 
     /// Defines the default options of the navigation accessory view.
     public static var defaultNavigationOptions = RowNavigationOptions.Enabled.union(.SkipCanNotBecomeFirstResponderRow)
@@ -58,7 +58,7 @@ public final class Form {
     /// This form's delegate
     public weak var delegate: FormDelegate?
 
-    public init() {}
+    public required init() {}
 
     /**
      Returns the row at the given indexPath
@@ -413,7 +413,7 @@ extension Form {
 		return kvoWrapper._allSections.contains { $0 is BaseMultivaluedSection }
 	}
 
-    func getValues(for rows: [BaseRow]) -> [String: Any?] {
+    public func getValues(for rows: [BaseRow]) -> [String: Any?] {
         return rows.reduce([String: Any?]()) {
             var result = $0
             result[$1.tag!] = $1.baseValue
@@ -421,7 +421,7 @@ extension Form {
         }
     }
 
-    func getValues(for multivaluedSections: [BaseMultivaluedSection]?) -> [String: [Any?]] {
+    public func getValues(for multivaluedSections: [BaseMultivaluedSection]?) -> [String: [Any?]] {
         return multivaluedSections?.reduce([String: [Any?]]()) {
             var result = $0
             result[$1.tag!] = $1.values()
